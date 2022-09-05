@@ -21,7 +21,7 @@ pipeline {
     stage('Docker Build') {
       steps {
         sh '''
-        docker build -t sstechnosolutions/testapp:$PROJECT_VERSION .
+        docker build -t harshasure/testapp:$PROJECT_VERSION .
         '''
       }
     }
@@ -30,34 +30,12 @@ pipeline {
         withCredentials([usernamePassword(credentialsId: 'dockerHubPasswd', passwordVariable: 'DOCKERHUB_PASSWD', usernameVariable: 'DOCKERHUB_USERNAME')]) {
           sh '''
           docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWD
-          docker push sstechnosolutions/testapp:$PROJECT_VERSION
+          docker push harshasure/testapp:$PROJECT_VERSION
           '''
         }
       }
     }
-    stage('DownLoad Kube Config') {
-      steps {
-        withCredentials([usernamePassword(credentialsId: 'aws-creds', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY')]) {
-          sh '''
-          aws configure set aws_access_key_id $AWS_ACCESS_KEY
-          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-          aws configure set default.region $AWS_REGION
-          aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
-          '''
-        }
-      }
-    }
-    stage('Kubernetes Deploy') {
-      steps {
-        sh 'echo $PROJECT_VERSION'
-        sh './kubernetes/run_deployment.sh'
-      }
-    }
-    stage('Kubernetes Deploy Service') {
-      steps {
-        sh 'kubectl apply -f kubernetes/service.yaml'
-      }
-    }
+     //CODE
   }
 }
 
