@@ -47,6 +47,17 @@ pipeline {
         }
       }
     }
+    stage('Kubernetes Deploy') {
+      steps {
+        sh 'echo $PROJECT_VERSION'
+        sh './kubernetes/run_deployment.sh'
+      }
+    }
+    stage('Kubernetes Deploy Service') {
+      steps {
+        sh 'kubectl apply -f kubernetes/service.yaml'
+      }
+    }
   }
 }
 
