@@ -3,7 +3,7 @@ pipeline {
   environment {
     PROJECT_VERSION=project_version()
     AWS_REGION= "us-west-2"
-    CLUSTER_NAME="eksdemo-live1"
+    CLUSTER_NAME="eksdemo1"
   }
   stages {
     //stage('GitCheckout') {
